@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Schoolstan
 
 Schoolstan is a modern, full-featured school management system designed to streamline administrative tasks, enhance communication, and empower students, teachers, and administrators. Built with React and Vite, it offers a seamless experience for managing classes, students, teachers, subjects, notices, and more.
@@ -31,3 +32,6 @@ Krish Kumar
 
 ### License
 This project is developed and maintained by Krish Kumar.
+=======
+# School-Management-System
+>>>>>>> 8c65fbcab5aaf6f241fd63b2f25569a5e7dad527
