@@ -32,8 +32,9 @@ console.log('MONGO_URL:', process.env.MONGO_URL);
 
 async function ensureDemoUsers() {
   // 1. Upsert demo admin
-  const adminPassword = await bcrypt.hash('zxc', 10);
-  const admin = await Admin.findOneAndUpdate(
+  let admin = await Admin.findOne({ email: 'yogendra@12' });
+  let adminPassword = admin && admin.password && admin.password.startsWith('$2b$') ? admin.password : await bcrypt.hash('zxc', 10);
+  admin = await Admin.findOneAndUpdate(
     { email: 'yogendra@12' },
     {
       name: 'Demo Admin',
@@ -56,7 +57,8 @@ async function ensureDemoUsers() {
   );
 
   // 3. Upsert demo teacher
-  const teacherPassword = await bcrypt.hash('zxc', 10);
+  let teacher = await Teacher.findOne({ email: 'tony@12' });
+  let teacherPassword = teacher && teacher.password && teacher.password.startsWith('$2b$') ? teacher.password : await bcrypt.hash('zxc', 10);
   await Teacher.findOneAndUpdate(
     { email: 'tony@12' },
     {
@@ -71,7 +73,8 @@ async function ensureDemoUsers() {
   );
 
   // 4. Upsert demo student
-  const studentPassword = await bcrypt.hash('zxc', 10);
+  let student = await Student.findOne({ rollNum: 1, name: 'Deeepesh Awasthi' });
+  let studentPassword = student && student.password && student.password.startsWith('$2b$') ? student.password : await bcrypt.hash('zxc', 10);
   await Student.findOneAndUpdate(
     { rollNum: 1, name: 'Deeepesh Awasthi' },
     {
