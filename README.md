@@ -1,3 +1,4 @@
+
 <h1 align="center">
     SCHOOL MANAGEMENT SYSTEM
 </h1>
@@ -8,32 +9,32 @@ Seamlessly track attendance, assess performance, and provide feedback. <br>
 Access records, view marks, and communicate effortlessly.
 </h3>
 
-
 # About
 
-The School Management System is a web-based application built using the MERN (MongoDB, Express.js, React.js, Node.js) stack. It aims to streamline school management, class organization, and facilitate communication between students, teachers, and administrators.
+The School Management System (Schoolstan) is a modern, web-based application built using the MERN (MongoDB, Express.js, React.js, Node.js) stack. It streamlines school management, class organization, and facilitates communication between students, teachers, parents, and administrators.
 
 ## Features
 
-- **User Roles:** The system supports three user roles: Admin, Teacher, and Student. Each role has specific functionalities and access levels.
-
-- **Admin Dashboard:** Administrators can add new students and teachers, create classes and subjects, manage user accounts, and oversee system settings.
-
-- **Attendance Tracking:** Teachers can easily take attendance for their classes, mark students as present or absent, and generate attendance reports.
-
-- **Performance Assessment:** Teachers can assess students' performance by providing marks and feedback. Students can view their marks and track their progress over time.
-
-- **Data Visualization:** Students can visualize their performance data through interactive charts and tables, helping them understand their academic performance at a glance.
-
-- **Communication:** Users can communicate effortlessly through the system. Teachers can send messages to students and vice versa, promoting effective communication and collaboration.
+- **User Roles:** Admin, Teacher, Student, and Parent roles with specific functionalities and access levels.
+- **Admin Dashboard:** Add students and teachers, create classes and subjects, manage user accounts, oversee system settings.
+- **Attendance Tracking:** Teachers can take attendance, mark students, and generate reports. Parents can view their children’s attendance.
+- **Performance Assessment:** Teachers provide marks and feedback. Students and parents can view marks and track progress.
+- **Data Visualization:** Interactive charts and tables for performance analytics.
+- **Communication:** Universal messaging system for all roles, including inbox, sent, conversation view, and notifications.
+- **Notice Board & Complaints:** Post and view notices, submit and track complaints.
+- **Parent Portal:** Dedicated registration, login, and dashboard for parents.
+- **Dark/Light Mode:** Global toggle with MUI’s theme provider.
+- **Profile Avatars:** Users can upload/change profile pictures.
+- **Real-time/In-app Notifications:** For new notices, complaints, messages, and events.
+- **Loading Skeletons:** For tables and cards during data fetches.
+- **Accessibility Improvements:** Enhanced color contrast, keyboard navigation, ARIA labels.
+- **Responsive, user-friendly interface**
 
 ## Technologies Used
 
-- Frontend: React.js, Material UI, Redux
-- Backend: Node.js, Express.js
-- Database: MongoDB
-
-<br>
+- **Frontend:** React.js (Vite), Material UI, Redux
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB
 
 # Installation
 
@@ -65,7 +66,21 @@ npm start
 ```
 Now, navigate to `localhost:3000` in your browser. 
 The Backend API will be running at `localhost:5000`.
-<br>
+
+---
+
+## Vite Version (Schoolstan)
+
+For the Vite-based frontend:
+
+```sh
+cd frontend-vite
+npm install
+npm run dev
+```
+
+---
+
 # Error Solution
 
 You might encounter an error while signing up, either a network error or a loading error that goes on indefinitely.
@@ -73,114 +88,25 @@ You might encounter an error while signing up, either a network error or a loadi
 To resolve it:
 
 1. Navigate to the `frontend > .env` file.
-
 2. Uncomment the first line. After that, terminate the frontend terminal. Open a new terminal and execute the following commands:
 ```sh
 cd frontend
 npm start
 ```
+3. If the issue persists, update the base URL in all `Handle` files in `frontend/src/redux` as described below:
+   - Add `const REACT_APP_BASE_URL = "http://localhost:5000";` after imports.
+   - Replace all `process.env.REACT_APP_BASE_URL` with `REACT_APP_BASE_URL`.
+   - Repeat for all files with "Handle" in their names.
 
-After completing these steps, try signing up again. If the issue persists, follow these additional steps to resolve it:
-
-1. Navigate to the `frontend > src > redux > userRelated > userHandle.js` file.
-
-2. Add the following line after the import statements:
-
-```javascript
-const REACT_APP_BASE_URL = "http://localhost:5000";
-```
-
-3. Replace all instances of `process.env.REACT_APP_BASE_URL` with `REACT_APP_BASE_URL`.
-
-**IMPORTANT:** Repeat the same process for all other files with "Handle" in their names.
-
-For example, in the `redux` folder, there are other folders like `userRelated`. In the `teacherRelated` folder, you'll find a file named `teacherHandle`. Similarly, other folders contain files with "Handle" in their names. Make sure to update these files as well.
-
-The issue arises because the `.env` file in the frontend may not work for all users, while it works for me.
-
-Additionally:
-
-- When testing the project, start by signing up rather than logging in as a guest or using regular login if you haven't created an account yet.
-  
-  To use guest mode, navigate to `LoginPage.js` and provide an email and password from a project already created in the system. This simplifies the login process, and after creating your account, you can use your credentials.
-
-These steps should resolve the network error in the frontend. If the issue persists, feel free to contact me for further assistance.
+If the issue persists, feel free to contact for further assistance.
 
 # Delete Feature Not Working Solution
 
-When attempting to delete items, you may encounter a popup message stating, "Sorry, the delete function has been disabled for now." This message appears because I have disabled the delete function on my live site to prevent guests from deleting items. If you wish to enable the delete feature, please follow these steps:
+If you see "Sorry, the delete function has been disabled for now.", follow these steps to enable delete:
 
-1. Navigate to the `frontend > src > redux > userRelated > userHandle.js` file.
-
-2. If you haven't made any changes, you should find the `deleteUser` function at line 71. It may be commented out. It might look like this:
-
-```javascript
-// export const deleteUser = (id, address) => async (dispatch) => {
-//     dispatch(getRequest());
-
-//     try {
-//         const result = await axios.delete(`${process.env.REACT_APP_BASE_URL}/${address}/${id}`);
-//         if (result.data.message) {
-//             dispatch(getFailed(result.data.message));
-//         } else {
-//             dispatch(getDeleteSuccess());
-//         }
-//     } catch (error) {
-//         dispatch(getError(error));
-//     }
-// }
-```
-
-3. Uncomment above `deleteUser` function and comment out this `deleteUser` function that is currently running from line 87 to line 90 :
-
-```javascript
-export const deleteUser = (id, address) => async (dispatch) => {
-    dispatch(getRequest());
-    dispatch(getFailed("Sorry the delete function has been disabled for now."));
-}
-```
-
-4. If you have previously modified the code, you may find the `deleteUser` functions at different lines. In this case, uncomment the original code and comment out the current one.
-
-5. Next, navigate to the `frontend > src > pages > admin` folder. Here, you will find different folders suffixed with "Related". Open each folder and locate files prefixed with "Show".
-
-6. Open each file with "Show" as a prefix and search for a function named `deleteHandler`. For example:
-   
-```javascript
-const deleteHandler = (deleteID, address) => {
-  console.log(deleteID);
-  console.log(address);
-  setMessage("Sorry, the delete function has been disabled for now.");
-  setShowPopup(true);
-  // dispatch(deleteUser(deleteID, address))
-  //   .then(() => {
-  //     dispatch(getAllSclasses(adminID, "Sclass"));
-  //   })
-}
-```
-
-7. This is an example snippet from `ShowClasses`. In other files with "Show" as a prefix, it may differ.
-
-8. Uncomment the commented-out code inside the `deleteHandler` function and comment out the existing code. It should resemble this:
-
-```javascript
-const deleteHandler = (deleteID, address) => {
-  // console.log(deleteID);
-  // console.log(address);
-  // setMessage("Sorry, the delete function has been disabled for now.");
-  // setShowPopup(true);
-  dispatch(deleteUser(deleteID, address))
-    .then(() => {
-      dispatch(getAllSclasses(adminID, "Sclass"));
-    })
-}
-```
-
-9. Repeat these steps for every other file. In some cases, the `deleteHandler` function may also be found in files prefixed with "View". Check those files and repeat the same process.
-
-If the issue persists, feel free to contact me for further assistance.
-
-Don't forget to leave a star for this project if you found the solution helpful. Thank you!
+1. In `frontend/src/redux/userRelated/userHandle.js`, uncomment the original `deleteUser` function and comment out the disabled version.
+2. In `frontend/src/pages/admin/*Related/Show*.js`, uncomment the code in `deleteHandler` that dispatches `deleteUser` and comment out the code that shows the disabled message.
+3. Repeat for all relevant files (including those prefixed with "View" if present).
 
 # Deployment
 * Render - server side
@@ -188,29 +114,17 @@ Don't forget to leave a star for this project if you found the solution helpful.
 
 # Planned & Recent Major Features (TODOs)
 
-Below are the major features that have been implemented or are planned for the School Management System. These features enhance usability, analytics, communication, and accessibility for all user roles.
-
 1. **Advanced Attendance Analytics**
-   - Unified analytics dashboard for all roles (admin, teacher, student, parent) with filtering, charts, summary stats, and CSV/PDF export. Responsive and visually appealing UI.
-
 2. **Parent Portal**
-   - Dedicated parent registration, login, and dashboard. Parents can view their children’s attendance, marks, and notices. Role-based access and navigation.
-
 3. **Messaging System**
-   - Universal messaging for all roles (admin, teacher, student, parent). Features inbox, sent, conversation view, new message dialog, avatars, empty states, and responsive layout.
-
 4. **Dark/Light Mode**
-   - Global dark/light mode toggle using MUI’s theme provider. All pages/components use theme colors and adapt to dark/light mode. Refined theme for clarity and contrast, including charts/graphs.
-
 5. **Profile Avatars**
-   - Users can upload/change their profile picture. Avatars are displayed on profile pages and in messaging. Supports image upload and update for all user roles.
-
 6. **Real-time/In-app Notifications**
-   - Users receive real-time or in-app notifications for new notices, complaints, messages, and other important events.
-
 7. **Loading Skeletons**
-   - Loading skeletons for tables and cards to improve perceived performance and provide visual feedback during data fetches.
-
 8. **Accessibility Improvements**
-   - Enhanced accessibility: improved color contrast, keyboard navigation, and ARIA labels for a more inclusive user experience.
 
+# Author
+Krish Kumar
+
+# License
+This project is developed and maintained by Krish Kumar.
