@@ -27,6 +27,7 @@ const teacherRegister = async (req, res) => {
 };
 
 const teacherLogIn = async (req, res) => {
+    console.log('TeacherLogin route hit', req.body);
     try {
         let teacher = await Teacher.findOne({ email: req.body.email });
         if (teacher) {
@@ -36,15 +37,16 @@ const teacherLogIn = async (req, res) => {
                 teacher = await teacher.populate("school", "schoolName")
                 teacher = await teacher.populate("teachSclass", "sclassName")
                 teacher.password = undefined;
-                res.send(teacher);
+                return res.status(200).json({ success: true, teacher });
             } else {
-                res.send({ message: "Invalid password" });
+                return res.status(401).json({ success: false, message: "Invalid password" });
             }
         } else {
-            res.send({ message: "Teacher not found" });
+            return res.status(404).json({ success: false, message: "Teacher not found" });
         }
     } catch (err) {
-        res.status(500).json(err);
+        console.error(err);
+        return res.status(500).json({ success: false, error: err.message || err });
     }
 };
 
