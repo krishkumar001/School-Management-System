@@ -34,6 +34,7 @@ const studentRegister = async (req, res) => {
 };
 
 const studentLogIn = async (req, res) => {
+    console.log('StudentLogin route hit', req.body);
     try {
         let student = await Student.findOne({ rollNum: req.body.rollNum, name: req.body.studentName });
         if (student) {
@@ -44,15 +45,16 @@ const studentLogIn = async (req, res) => {
                 student.password = undefined;
                 student.examResult = undefined;
                 student.attendance = undefined;
-                res.send(student);
+                return res.status(200).json({ success: true, student });
             } else {
-                res.send({ message: "Invalid password" });
+                return res.status(401).json({ success: false, message: "Invalid password" });
             }
         } else {
-            res.send({ message: "Student not found" });
+            return res.status(404).json({ success: false, message: "Student not found" });
         }
     } catch (err) {
-        res.status(500).json(err);
+        console.error(err);
+        return res.status(500).json({ success: false, error: err.message || err });
     }
 };
 
