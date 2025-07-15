@@ -37,8 +37,10 @@ const studentLogIn = async (req, res) => {
     console.log('StudentLogin route hit', req.body);
     try {
         let student = await Student.findOne({ rollNum: req.body.rollNum, name: req.body.studentName });
+        console.log('Student found:', student);
         if (student) {
             const validated = await bcrypt.compare(req.body.password, student.password);
+            console.log('Password validated:', validated);
             if (validated) {
                 student = await student.populate("school", "schoolName")
                 student = await student.populate("sclassName", "sclassName")
@@ -47,13 +49,15 @@ const studentLogIn = async (req, res) => {
                 student.attendance = undefined;
                 return res.status(200).json({ success: true, student });
             } else {
+                console.log('Invalid password for student:', req.body.rollNum);
                 return res.status(401).json({ success: false, message: "Invalid password" });
             }
         } else {
+            console.log('Student not found for:', req.body);
             return res.status(404).json({ success: false, message: "Student not found" });
         }
     } catch (err) {
-        console.error(err);
+        console.error('Error in StudentLogin:', err, 'Request body:', req.body);
         return res.status(500).json({ success: false, error: err.message || err });
     }
 };

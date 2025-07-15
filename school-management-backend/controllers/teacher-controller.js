@@ -30,8 +30,10 @@ const teacherLogIn = async (req, res) => {
     console.log('TeacherLogin route hit', req.body);
     try {
         let teacher = await Teacher.findOne({ email: req.body.email });
+        console.log('Teacher found:', teacher);
         if (teacher) {
             const validated = await bcrypt.compare(req.body.password, teacher.password);
+            console.log('Password validated:', validated);
             if (validated) {
                 teacher = await teacher.populate("teachSubject", "subName sessions")
                 teacher = await teacher.populate("school", "schoolName")
@@ -39,13 +41,15 @@ const teacherLogIn = async (req, res) => {
                 teacher.password = undefined;
                 return res.status(200).json({ success: true, teacher });
             } else {
+                console.log('Invalid password for teacher:', req.body.email);
                 return res.status(401).json({ success: false, message: "Invalid password" });
             }
         } else {
+            console.log('Teacher not found for:', req.body);
             return res.status(404).json({ success: false, message: "Teacher not found" });
         }
     } catch (err) {
-        console.error(err);
+        console.error('Error in TeacherLogin:', err, 'Request body:', req.body);
         return res.status(500).json({ success: false, error: err.message || err });
     }
 };
